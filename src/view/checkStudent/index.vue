@@ -204,8 +204,6 @@
                         const data = res.data.data;
                         this.pageCount = data.page_count * 10;
                         this.data6 = data.std_list;
-                    } else {
-                        this.$Message.error(res.data.msg);
                     }
 				});
         	},
@@ -253,8 +251,6 @@
                             this.page -= 1;
                         }
                         this.getStudentList();
-                    } else {
-                        this.$Message.error(res.data.msg);
                     }
                 });
             },

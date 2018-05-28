@@ -68,14 +68,12 @@
 					self.$Spin.hide();
 					if (res.data.status === 0) {
 						const user_info = res.data.data;
-						sessionStorage.user_name = user_info.name;
-						sessionStorage.user_power = user_info.power;
+						localStorage.user_name = user_info.name;
+						localStorage.user_power = user_info.power;
 						localStorage.token = user_info.token;
 						self.$Message.success('登录成功');
 						self.$http.defaults.headers.common['Authorization'] = localStorage.token || '';
 						self.$router.push({ name: 'welcome' });
-					} else {
-						self.$Message.error(res.data.msg);
 					}
 				});
 			},

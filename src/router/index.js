@@ -5,6 +5,7 @@ import index from '@/view/index.vue'
 import welcome from '@/view/welcome'
 import student from '@/view/checkStudent'
 import teacher from '@/view/teacher'
+import othermanage from '@/view/othermanage'
 
 // components
 // import addStudent from '@/components/form/addStudent'
@@ -13,6 +14,7 @@ import teacher from '@/view/teacher'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/login',
@@ -37,6 +39,11 @@ export default new Router({
       		path: 'teacher',
       		name: 'teacher',
       		component: teacher,
+      	},
+      	{
+      		path: 'other',
+      		name: 'other-manage',
+      		component: othermanage,
       	},
       ],
     }

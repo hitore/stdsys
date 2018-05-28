@@ -26,6 +26,9 @@ axios.interceptors.request.use(function (config) {
 
 axios.interceptors.response.use(function(response) {
 	// 对响应数据做点什么
+	if (response.data.status !== 0) {
+		iView.Message.error(response.data.msg);
+	}
 	if (response.data.status === 20002 || response.data.status === 20001) {
 		router.replace({ name: 'login' });
 	}

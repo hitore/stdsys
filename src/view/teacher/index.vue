@@ -7,7 +7,7 @@
 		    <Input style="width: 200px;margin-left: 20px;" v-model="checkInfo.name">
 		        <span slot="prepend">姓名</span>
 		    </Input>
-		    <Button style="margin-left: 20px;" type="info" @click="">查询</Button>
+		    <Button style="margin-left: 20px;" type="info" @click="handleSearch">查询</Button>
 		    <Button @click="addTeacher" style="margin-left: auto;" type="info">添加教师</Button>
 		</div>
 		<Table :loading="loading" border :columns="columns7" :data="data6"></Table>
@@ -15,12 +15,12 @@
 			<Page class-name="fenye" @on-change="handlePage" :total="pageInfo.total" show-elevator></Page>
 		</div>
         <Modal
-            title="删除学生"
+            title="删除老师"
             v-model="delInfo.show"
             :loading="delInfo.loading"
-            @on-ok=""
+            @on-ok="remove"
             class-name="vertical-center-modal">
-            <p>您确定要删除学生“{{delInfo.stdName}}”吗？</p>
+            <p>您确定要删除员工“{{delInfo.teaName}}”吗？</p>
         </Modal>
         <add-teacher
             :show-add-teacher.sync="showAddTeacher"
@@ -40,8 +40,9 @@
                 loading: true,
                 delInfo: {
                     show: false,
-                    loading: false,
-                    stdName: '',
+                    loading: true,
+                    teaName: '',
+                    id: '',
                 },
                 checkInfo: {
                     id: '',
@@ -119,7 +120,8 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index);
+                                            // this.remove(params.row.id);
+                                            this.handleDelete(params.row);
                                         }
                                     }
                                 }, '删除'),
@@ -139,6 +141,50 @@
             this.getTeacherList();
         },
         methods: {
+            handleSearch() {
+                this.loading = true;
+                this.$http({
+                    method: 'get',
+                    url: '/api/search_teacher',
+                    params: {
+                        id: this.checkInfo.id,
+                        name: this.checkInfo.name,
+                        page: this.pageInfo.page,
+                        count: this.pageInfo.count,
+                    },
+                }).then((res) => {
+                    this.loading = false;
+                    if (res.data.status === 0) {
+                        this.data6 = res.data.data.tea_list;
+                        this.pageInfo = res.data.data.total;
+                    }
+                });
+            },
+            handleDelete(row) {
+                this.delInfo.teaName = row.name;
+                this.delInfo.id = row.id;
+                this.delInfo.show = true;
+            },
+            remove() {
+                const id = this.delInfo.id;
+                this.$http({
+                    method: 'get',
+                    url: '/api/delete_teacher',
+                    params: {
+                        id,
+                    },
+                }).then((res) => {
+                    this.delInfo.show = false;
+                    if (res.data.status === 0) {
+                        this.pageInfo.total = parseInt(res.data.data.total / 7 * 10, 10);
+                        const x = (this.pageInfo.page - 1) * 10;
+                        if (this.pageInfo.total <= x) {
+                            this.pageInfo.page -= 1;
+                        }
+                        this.getTeacherList();
+                    }
+                });
+            },
             handlePage(e) {
                 this.pageInfo.page = e;
                 this.getTeacherList();
@@ -155,7 +201,7 @@
                 }).then((res) => {
                     if (res.data.status === 0) {
                         const data = res.data.data;
-                        this.pageInfo.total = data.total * 2;
+                        this.pageInfo.total = parseInt(data.total / 7 * 10, 10);
                         this.data6 = data.tea_list;
                         this.loading = false;
                     }

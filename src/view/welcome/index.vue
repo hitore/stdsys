@@ -39,8 +39,8 @@
 					this.$router.replace({ name: 'login' });
 				}
 			});
-			this.name = sessionStorage.user_name;
-			this.power = sessionStorage.user_power;
+			this.name = localStorage.user_name;
+			this.power = localStorage.user_power;
 		},
 	}
 </script>
