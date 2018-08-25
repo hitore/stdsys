@@ -4,6 +4,7 @@ import login from '@/view/login/index.vue'
 import index from '@/view/index.vue'
 import welcome from '@/view/welcome'
 import student from '@/view/checkStudent'
+import subject from '@/view/subject'
 import teacher from '@/view/teacher'
 import othermanage from '@/view/othermanage'
 
@@ -35,6 +36,11 @@ export default new Router({
       		name: 'student',
       		component: student,
       	},
+        {
+          path: 'subject',
+          name: 'subject',
+          component: subject,
+        },
       	{
       		path: 'teacher',
       		name: 'teacher',

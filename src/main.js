@@ -5,13 +5,17 @@ import App from './App'
 import router from './router'
 import iView from 'iview';
 import axios from 'axios';
+import xlsx from 'xlsx';
 import 'iview/dist/styles/iview.css';
+
+
 
 Vue.config.productionTip = false
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Authorization'] = localStorage.token || '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.$http = axios;
+Vue.prototype.$xlsx = xlsx;
 
 Vue.use(iView);
 

@@ -100,27 +100,29 @@
 		methods: {
 			initData(list) {
 				this.collageData = [];
-				list.forEach(item => {
+				list.forEach((item, qq) => {
 					const li = {
 						value: item.name,
 	                    label: item.name,
 	                    children: [],
 					};
-					item.speciality.forEach((item2,index) => {
-						li.children.push({
-							value: item2.name,
-							label: item2.name,
-							children: [],
-						});
-						if (item2.class) {
-							item2.class.forEach(item3 => {
-								li.children[index].children.push({
-									value: item3,
-									label: item3,
-								});
+					if (item.speciality) {
+						item.speciality.forEach((item2,index) => {
+							li.children.push({
+								value: item2.name,
+								label: item2.name,
+								children: [],
 							});
-						}
-					});
+							if (item2.class) {
+								item2.class.forEach(item3 => {
+									li.children[index].children.push({
+										value: item3,
+										label: item3,
+									});
+								});
+							}
+						});
+					}
 					this.collageData.push(li);
 				});
 			},
@@ -160,6 +162,7 @@
             	}
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                    	console.log(this.formValidate);
                     	this.handleSpinCustom();
                     	this.$emit('closeForm');
                         this.$http({

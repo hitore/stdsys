@@ -215,10 +215,11 @@
         	addTeacher() {
                 this.form = {
                     name: '',
-                    id: '',
+                    // id: '',
                     sex: '',
                     position: '',
                     collage: '',
+                    password: '',
                 };
                 this.mode = 0;
                 this.showAddTeacher = true;

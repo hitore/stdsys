@@ -9,6 +9,12 @@
 		    </Input>
 		    <Button style="margin-left: 20px;" type="info" @click="check">查询</Button>
 		    <Button @click="addStudent" style="margin-left: auto;" type="info">添加学生</Button>
+            <Upload
+                style="height: 40px;"
+                :before-upload="handleUpload"
+                action="//jsonplaceholder.typicode.com/posts/">
+                <Button style="height: 40px; margin-left: 20px;" type="info">批量导入</Button>
+            </Upload>
 		</div>
 		<Table border :columns="columns7" :data="data6"></Table>
 		<div class="fenye-box">
@@ -23,6 +29,18 @@
             class-name="vertical-center-modal">
             <p>您确定要删除学生“{{delInfo.stdName}}”吗？</p>
         </Modal>
+        <Modal
+            v-model="xlsx.show"
+            title="批量添加"
+            width="1000"
+            @on-ok=""
+            @on-cancel="">
+            <Table :columns="xlsx.columns" height="500" :data="xlsx.data"></Table>
+            <div slot="footer">
+                <Button @click="xlsx.show = false">cancle</Button>
+                <Button type="info" :loading="xlsx.loading" @click="addMoreStudent">add</Button>
+            </div>
+        </Modal>
 	</div>
 </template>
 <script>
@@ -33,6 +51,13 @@
 		},
         data () {
             return {
+                xlsx: {
+                    show: false,
+                    columns: [],
+                    data: [],
+                    loading: false,
+                },
+                file: null,
                 checkInfo: {
                     id: '',
                     name: '',
@@ -134,12 +159,82 @@
                 data6: [],
                 page: 1,
                 pageCount: 10,
+                KEY_TYPE: {
+                    '学号': 'id',
+                    '姓名': 'name',
+                    '性别': 'sex',
+                    '班级': 'major',
+                    '学院': 'collage',
+                },
             }
         },
         mounted() {
         	this.getStudentList();
         },
         methods: {
+            handleUpload(file) {
+                const self = this;
+                var reader = new FileReader();
+                reader.readAsBinaryString(file);
+                reader.onload = function(e) {
+                    var data = e.target.result;
+                    const wb = self.$xlsx.read(data, { type: 'binary' });
+                    const da = self.$xlsx.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
+                    self.xlsx.show = true;
+                    const columns = [];
+                    da[0].forEach((item, index) => {
+                        if (index === 0) {
+                            columns.push({
+                                title: item,
+                                key: self.KEY_TYPE[item] || item,
+                                width: 200,
+                                fixed: 'left',
+                            });
+                        } else {
+                            columns.push({
+                                title: item,
+                                key: self.KEY_TYPE[item] || item,
+                                width: 200,
+                            });
+                        }
+                    });
+                    self.xlsx.columns = columns;
+                    da.shift(1);
+                    const tableData = [];
+                    da.forEach(item => {
+                        const q = {
+                            tagList: [],
+                        };
+                        item.forEach((item2, index) => {
+                            q[columns[index].key] = item2;
+                            if (parseInt(item2, 10) > 0 && parseInt(item2, 10) <= 100) {
+                                q.tagList.push(`${columns[index].key}：${item2}`);
+                            }
+                        });
+                        tableData.push(q);
+                    });
+                    self.xlsx.data = tableData;
+                    self.tableData = tableData;
+                }
+                return false;
+            },
+            addMoreStudent() {
+                this.xlsx.loading = true;
+                this.$http({
+                    method: 'post',
+                    url: '/api/add_more_student',
+                    data: {
+                      std_form: this.tableData,
+                    },
+                }).then(res => {
+                    if (res.data.status === 0) {
+                        this.$Message.success('添加成功');
+                    }
+                    this.xlsx.loading = false;
+                    this.xlsx.show = false;
+                    this.getStudentList();
+                });
+            },
         	handleSpinCustom () {
                 this.$Spin.show({
                     render: (h) => {
@@ -290,5 +385,8 @@
     }
     .vertical-center-modal .ivu-modal{
         top: 0;
+    }
+    .ivu-upload-select{
+        height: 40px !important;
     }
 </style>

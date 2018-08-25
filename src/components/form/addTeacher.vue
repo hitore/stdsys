@@ -7,8 +7,8 @@
 			        <FormItem label="教师姓名" prop="name">
 			            <Input v-model="formValidate.name" placeholder="教师姓名"></Input>
 			        </FormItem>
-			        <FormItem label="职工号" prop="id">
-			            <Input :disabled="checkMode" v-model="formValidate.id" placeholder="职工号"></Input>
+			        <FormItem label="密码" prop="password">
+			            <Input v-model="formValidate.password" type="password" placeholder="密码"></Input>
 			        </FormItem>
 			        <FormItem label="性别" prop="sex">
 			            <Select v-model="formValidate.sex">
@@ -67,13 +67,14 @@
 					sex: '',
 					position: '',
 					collage: '',
+					password: '',
 				},
 				rules: {
 					name: [
 						{ required: true, message: '姓名不能为空', trigger: 'blur' },
 					],
-					id: [
-						{ required: true, message: '职工号不能为空', trigger: 'blur' },
+					password: [
+						{ required: true, message: '密码不能为空', trigger: 'blur' },
 					],
 					sex: [
 						{ required: true, message: '性别不能为空', trigger: 'blur' },

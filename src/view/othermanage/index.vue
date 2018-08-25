@@ -67,6 +67,23 @@
         	</span>
         </Col>
     </Row>
+    <Row>
+    	<Col span="24">
+        	<div class="flex">
+        		<p class="title">科目</p>
+        		<Button @click="handleAdd('subject')" type="ghost" icon="plus-round"></Button>
+        	</div>
+        </Col>
+        <Col span="24" class="block">
+        	<Tag
+        		type="dot"
+        		closable
+        		:color="color[index % 4]"
+        		v-for="(item,index) in subjectList"
+        		:key="item.id"
+        		@on-close="deleteSubject(item.id)">{{item.name}}</Tag>
+        </Col>
+    </Row>
     <Modal
         :title="modalTitle"
         v-model="showModal"
@@ -83,7 +100,7 @@
         		<Col span="12"><Input v-model="addContent" placeholder="请输入您要添加的内容"></Input></Col>
         	</Row>
         </div>
-        <div v-if="mode == 'collage'">
+        <div v-if="mode == 'collage' || mode == 'subject'">
         	<Input v-model="addContent" placeholder="请输入您要添加的内容"></Input>
         </div>
         <div slot="footer">
@@ -100,6 +117,7 @@ export default {
 		return {
 			color: ['blue', 'green', 'red', 'yellow'],
 			list: [],
+			subjectList: [],
 			listData: [],
 			showModal: false,
 			addContent: '',
@@ -120,12 +138,15 @@ export default {
 				return '添加班级';
 			} else if (this.mode === 'speciality') {
 				return '添加专业';
+			} else if (this.mode === 'subject') {
+				return '添加科目';
 			}
 			return '';
 		},
 	},
 	mounted() {
 		this.getDataList();
+		this.getSubjectList();
 	},
 	methods:{
 		initData() {
@@ -136,14 +157,39 @@ export default {
                     label: item.name,
                     children: [],
 				};
-				item.speciality.forEach((item2,index) => {
-					li.children.push({
-						value: index,
-						label: item2.name,
+				if (item.speciality) {
+					item.speciality.forEach((item2,index) => {
+						li.children.push({
+							value: index,
+							label: item2.name,
+						});
 					});
-				});
+				}
 				this.listData.push(li);
 			});
+		},
+		deleteSubject(id) {
+			const self = this;
+			this.$Modal.confirm({
+                title: '提示',
+                content: '确定要删除该科目吗',
+                loading: true,
+                onOk: () => {
+                	self.$http({
+                		method: 'get',
+                		url: '/api/delete_subject',
+                		params:{
+                			id,
+                		},
+                	}).then((res) => {
+                		this.$Modal.remove();
+                		if (res.data.status === 0) {
+                			this.$Message.success('删除成功');
+                			self.getSubjectList();
+                		}
+                	});
+                }
+            });
 		},
 		delectClass(id, index, name) {
 			const self = this;
@@ -229,10 +275,28 @@ export default {
 				this.addSpeciality();
 			} else if (this.mode === 'class' && this.addClassInfo.length > 0) {
 				this.addClass();
+			} else if (this.mode === 'subject') {
+				this.addSubject();
 			} else {
 				this.$Message.info('您还没有内容没选择');
 				this.loading = false;
 			}
+		},
+		addSubject() {
+			this.$http({
+				method: 'get',
+				url: '/api/add_subject',
+				params: {
+					subject_name: this.addContent,
+				},
+			}).then(res => {
+				this.loading = false;
+				this.showModal = false;
+				if (res.data.status === 0) {
+					this.$Message.success('添加成功');
+				}
+				this.getSubjectList();
+			});
 		},
 		addClass() {
 			this.$http({
@@ -296,6 +360,14 @@ export default {
 				url: '/api/other',
 			}).then((res) => {
 				this.list = res.data.data.list;
+			});
+		},
+		getSubjectList() {
+			this.$http({
+				method: 'get',
+				url: '/api/check_subject',
+			}).then((res) => {
+				this.subjectList = res.data.data.subject_list;
 			});
 		},
 	}
