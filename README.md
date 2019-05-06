@@ -1,21 +1,37 @@
-# stdsys
+# 学生成绩管理系统
 
-> A Vue.js project
+```
+基于 vue + iview 开发的学生成绩管理系统
+```
+[基于 node + express 开发的后台](https://github.com/hitore/stdsysapi)
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+## 拉取仓库
+```
+git clone git@github.com:hitore/stdsys.git
+cd stdsys
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 安装依赖
+```
+npm install
+or
+cnpm install
+or 
+yarn install
+```
+
+## 本地开发
+```
+npm run dev
+```
+
+## 打包
+```
+npm run build
+```
+
+## TODO
+
+- [ ] vue-router，路由懒加载
+- [ ] 升级到vue-cli3
+- [ ] 重构
