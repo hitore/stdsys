@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="search-box">
-			<Input style="width: 200px;" v-model="checkInfo.id">
-		        <span slot="prepend">职工号</span>
-		    </Input>
-		    <Input style="width: 200px;margin-left: 20px;" v-model="checkInfo.name">
-		        <span slot="prepend">姓名</span>
-		    </Input>
-		    <Button style="margin-left: 20px;" type="info" @click="handleSearch">查询</Button>
-		    <Button @click="addTeacher" style="margin-left: auto;" type="info">添加教师</Button>
+        <i-nput style="width: 200px;" v-model="checkInfo.id">
+            <span slot="prepend">职工号</span>
+        </i-nput>
+        <i-nput style="width: 200px;margin-left: 20px;" v-model="checkInfo.name">
+            <span slot="prepend">姓名</span>
+        </i-nput>
+        <Button style="margin-left: 20px;" type="info" @click="handleSearch">查询</Button>
+        <Button @click="addTeacher" style="margin-left: auto;" type="info">添加教师</Button>
 		</div>
 		<Table :loading="loading" border :columns="columns7" :data="data6"></Table>
 		<div class="fenye-box">
@@ -48,9 +48,9 @@
                     id: '',
                     name: '',
                 },
-            	sexArr: ['男', '女', '未知'],
+                sexArr: ['男', '女', '未知'],
                 positionArr: ['教师', '教授'],
-            	mode: 0,
+                mode: 0,
                 showAddTeacher: false,
                 form: {
                     name: '',
@@ -78,15 +78,15 @@
                         },
                     },
                     {
-                    	title: '职位',
-                    	key: 'position',
+                        title: '职位',
+                        key: 'position',
                         render: (h, params) => {
                             return h('div', {}, this.positionArr[params.row.position]);
                         },
                     },
                     {
-                    	title: '学院',
-                    	key: 'collage',
+                        title: '学院',
+                        key: 'collage',
                     },
                     {
                         title: '操作',
@@ -212,7 +212,7 @@
                 this.mode = 1;
                 this.showAddTeacher = true;
             },
-        	addTeacher() {
+            addTeacher() {
                 this.form = {
                     name: '',
                     // id: '',

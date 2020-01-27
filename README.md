@@ -33,5 +33,5 @@ npm run build
 ## TODO
 
 - [ ] vue-router，路由懒加载
-- [ ] 升级到vue-cli3
+- [x] 升级到vue-cli3
 - [ ] 重构

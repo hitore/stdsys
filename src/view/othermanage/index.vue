@@ -1,87 +1,87 @@
 <template>
   <div class="other">
   	<Row>
-        <Col span="24">
-        	<div class="flex">
-        		<p class="title">学院</p>
-        		<Button @click="handleAdd('collage')" type="ghost" icon="plus-round"></Button>
-        	</div>
-        </Col>
+		<Col span="24">
+			<div class="flex">
+				<p class="title">学院</p>
+				<Button @click="handleAdd('collage')" type="ghost" icon="plus-round"></Button>
+			</div>
+		</Col>
         <Col span="24" class="block">
-        	<Tag
-        		type="dot"
-        		closable
-        		:color="color[index % 4]"
-        		v-for="(item,index) in list"
-        		:key="item.id"
-        		@on-close="delectCollage(item.id)">{{item.name}}</Tag>
+			<Tag
+				type="dot"
+				closable
+				:color="color[index % 4]"
+				v-for="(item,index) in list"
+				:key="item.id"
+				@on-close="delectCollage(item.id)">{{item.name}}</Tag>
         </Col>
     </Row>
     <Row>
         <Col span="24">
-        	<div class="flex">
-        		<p class="title">专业</p>
-        		<Button @click="handleAdd('speciality')" type="ghost" icon="plus-round"></Button>
-        	</div>
+			<div class="flex">
+				<p class="title">专业</p>
+				<Button @click="handleAdd('speciality')" type="ghost" icon="plus-round"></Button>
+			</div>
         </Col>
         <Col span="24" class="block">
-		    <span
-		    	v-for="(item,index) in list"
-        		:key="item.id">
-        		<span
-        			v-for="(item2,index2) in item.speciality"
-        			:key="index2">
-        			<Tag
-        				type="dot"
-        				closable
-        				:color="color[index % 4]"
-        				@on-close="delectSpeciality(item.id,item2.name)">{{item2.name}}</Tag>
-        		</span>
-        	</span>
+			<span
+				v-for="(item,index) in list"
+				:key="item.id">
+				<span
+					v-for="(item2,index2) in item.speciality"
+					:key="index2">
+					<Tag
+						type="dot"
+						closable
+						:color="color[index % 4]"
+						@on-close="delectSpeciality(item.id,item2.name)">{{item2.name}}</Tag>
+				</span>
+			</span>
         </Col>
     </Row>
     <Row>
         <Col span="24">
-        	<div class="flex">
-        		<p class="title">班级</p>
-        		<Button @click="handleAdd('class')" type="ghost" icon="plus-round"></Button>
-        	</div>
+			<div class="flex">
+				<p class="title">班级</p>
+				<Button @click="handleAdd('class')" type="ghost" icon="plus-round"></Button>
+			</div>
         </Col>
         <Col span="24" class="block">
-        	<span
-		    	v-for="(item,index) in list"
-        		:key="item.id">
-        		<span
-        			v-for="(item2,index2) in item.speciality"
-        			:key="index2">
-        			<span
-        				v-for="(item3,index3) in item2.class"
-        				:key="index3">
-        				<Tag
-	        				type="dot"
-	        				closable
-	        				:color="color[index % 4]"
-	        				@on-close="delectClass(item.id,index2,item3)">{{item3}}</Tag>
-        			</span>
-        		</span>
-        	</span>
+			<span
+				v-for="(item,index) in list"
+				:key="item.id">
+				<span
+					v-for="(item2,index2) in item.speciality"
+					:key="index2">
+					<span
+						v-for="(item3,index3) in item2.class"
+						:key="index3">
+						<Tag
+							type="dot"
+							closable
+							:color="color[index % 4]"
+							@on-close="delectClass(item.id,index2,item3)">{{item3}}</Tag>
+					</span>
+				</span>
+			</span>
         </Col>
     </Row>
     <Row>
-    	<Col span="24">
-        	<div class="flex">
-        		<p class="title">科目</p>
-        		<Button @click="handleAdd('subject')" type="ghost" icon="plus-round"></Button>
-        	</div>
+		<Col span="24">
+			<div class="flex">
+				<p class="title">科目</p>
+				<Button @click="handleAdd('subject')" type="ghost" icon="plus-round"></Button>
+			</div>
         </Col>
         <Col span="24" class="block">
-        	<Tag
-        		type="dot"
-        		closable
-        		:color="color[index % 4]"
-        		v-for="(item,index) in subjectList"
-        		:key="item.id"
-        		@on-close="deleteSubject(item.id)">{{item.name}}</Tag>
+			<Tag
+				type="dot"
+				closable
+				:color="color[index % 4]"
+				v-for="(item,index) in subjectList"
+				:key="item.id"
+				@on-close="deleteSubject(item.id)">{{item.name}}</Tag>
         </Col>
     </Row>
     <Modal
@@ -89,23 +89,23 @@
         v-model="showModal"
         class-name="vertical-center-modal">
         <div class="flex" v-if="mode == 'speciality'">
-        	<Select v-model="collageId" style="width:200px">
-		        <Option v-for="item in list" :value="item.id" :key="item.id">{{ item.name }}</Option>
-		    </Select>
-	        <Input style="width:280px" v-model="addContent" placeholder="请输入您要添加的内容"></Input>
+			<Select v-model="collageId" style="width:200px">
+				<Option v-for="item in list" :value="item.id" :key="item.id">{{ item.name }}</Option>
+			</Select>
+			<Input style="width:280px" v-model="addContent" placeholder="请输入您要添加的内容"></Input>
         </div>
         <div class="flex" v-if="mode == 'class'">
-        	<Row>
-        		<Col span="12"><Cascader :data="listData" v-model="addClassInfo"></Cascader></Col>
-        		<Col span="12"><Input v-model="addContent" placeholder="请输入您要添加的内容"></Input></Col>
-        	</Row>
+			<Row>
+				<Col span="12"><Cascader :data="listData" v-model="addClassInfo"></Cascader></Col>
+				<Col span="12"><Input v-model="addContent" placeholder="请输入您要添加的内容"></Input></Col>
+			</Row>
         </div>
         <div v-if="mode == 'collage' || mode == 'subject'">
-        	<Input v-model="addContent" placeholder="请输入您要添加的内容"></Input>
+        <Input v-model="addContent" placeholder="请输入您要添加的内容"></Input>
         </div>
         <div slot="footer">
-        	<Button @click="showModal = false">取消</Button>
-        	<Button :loading="loading" type="primary" @click="handleAddEvent">添加</Button>
+        <Button @click="showModal = false">取消</Button>
+        <Button :loading="loading" type="primary" @click="handleAddEvent">添加</Button>
         </div>
     </Modal>
   </div>
@@ -175,19 +175,19 @@ export default {
                 content: '确定要删除该科目吗',
                 loading: true,
                 onOk: () => {
-                	self.$http({
-                		method: 'get',
-                		url: '/api/delete_subject',
-                		params:{
-                			id,
-                		},
-                	}).then((res) => {
-                		this.$Modal.remove();
-                		if (res.data.status === 0) {
-                			this.$Message.success('删除成功');
-                			self.getSubjectList();
-                		}
-                	});
+					self.$http({
+						method: 'get',
+						url: '/api/delete_subject',
+						params:{
+							id,
+						},
+					}).then((res) => {
+						this.$Modal.remove();
+						if (res.data.status === 0) {
+							this.$Message.success('删除成功');
+							self.getSubjectList();
+						}
+					});
                 }
             });
 		},
@@ -198,21 +198,21 @@ export default {
                 content: '确定要删除该班级吗',
                 loading: true,
                 onOk: () => {
-                	self.$http({
-                		method: 'get',
-                		url: '/api/delete_class',
-                		params:{
-                			id,
-                			speciality_index: index,
-                			class_name: name,
-                		},
-                	}).then((res) => {
-                		this.$Modal.remove();
-                		if (res.data.status === 0) {
-                			this.$Message.success('删除成功');
-                			self.getDataList();
-                		}
-                	});
+					self.$http({
+						method: 'get',
+						url: '/api/delete_class',
+						params:{
+							id,
+							speciality_index: index,
+							class_name: name,
+						},
+					}).then((res) => {
+						this.$Modal.remove();
+						if (res.data.status === 0) {
+							this.$Message.success('删除成功');
+							self.getDataList();
+						}
+					});
                 }
             });
 		},
@@ -223,20 +223,20 @@ export default {
                 content: '删除后该专业下的班级都会清除',
                 loading: true,
                 onOk: () => {
-                	self.$http({
-                		method: 'get',
-                		url: '/api/delete_speciality',
-                		params:{
-                			id,
-                			speciality_name: name,
-                		},
-                	}).then((res) => {
-                		this.$Modal.remove();
-                		if (res.data.status === 0) {
-                			this.$Message.success('删除成功');
-                			self.getDataList();
-                		}
-                	});
+					self.$http({
+						method: 'get',
+						url: '/api/delete_speciality',
+						params:{
+							id,
+							speciality_name: name,
+						},
+					}).then((res) => {
+						this.$Modal.remove();
+						if (res.data.status === 0) {
+							this.$Message.success('删除成功');
+							self.getDataList();
+						}
+					});
                 }
             });
 		},
@@ -247,19 +247,19 @@ export default {
                 content: '删除后该学院下的专业都会清除',
                 loading: true,
                 onOk: () => {
-                	self.$http({
-                		method: 'get',
-                		url: '/api/remove_collage',
-                		params:{
-                			id: e,
-                		},
-                	}).then((res) => {
-                		this.$Modal.remove();
-                		if (res.data.status === 0) {
-                			this.$Message.success('删除成功');
-                			self.getDataList();
-                		}
-                	});
+					self.$http({
+						method: 'get',
+						url: '/api/remove_collage',
+						params:{
+							id: e,
+						},
+					}).then((res) => {
+						this.$Modal.remove();
+						if (res.data.status === 0) {
+							this.$Message.success('删除成功');
+							self.getDataList();
+						}
+					});
                 }
             });
 		},

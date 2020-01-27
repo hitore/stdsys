@@ -1,5 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -28,24 +26,25 @@ axios.interceptors.request.use(function (config) {
 	return Promise.reject(error);
 });
 
-axios.interceptors.response.use(function(response) {
+axios.interceptors.response.use(function (response) {
 	// 对响应数据做点什么
 	if (response.data.status !== 0) {
 		iView.Message.error(response.data.msg);
 	}
 	if (response.data.status === 20002 || response.data.status === 20001) {
-		router.replace({ name: 'login' });
+		router.replace({
+			name: 'login'
+		});
 	}
 	return response;
-}, function(error) {
+}, function (error) {
 	// 对响应错误做点什么
-    return Promise.reject(error);
+	return Promise.reject(error);
 });
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+	el: '#app',
+	router,
+	render: h => h(App),
 })
